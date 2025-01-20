@@ -1,11 +1,9 @@
-import { codeSnippets } from "../codeSnippets"
-
-function CodeView({ language }) {
-    return (
-        <div>
-            <pre>{codeSnippets[language]}</pre>
-        </div>
-    )
+function CodeView({ data }) {
+  return (
+    <div>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
 }
 
-export default CodeView
+export default CodeView;

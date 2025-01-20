@@ -1,39 +1,28 @@
-import { codeSnippets } from "./codeSnippets";
 import { useState } from "react";
-import PrettyPrintToggle from "./components/prettyPrintToggle";
 import CardView from "./components/cardView";
 import CodeView from "./components/codeView";
 import { portfolioData } from "./data/portfolioData";
+import RequestBar from "./components/requestBar";
 
 function App() {
-  const languages = ["javascript", "python", "csharp"];
-  const [language, setLanguage] = useState("javascript");
-  const [prettyPrint, setPrettyPrint] = useState(false);
+  const [viewMode, setViewMode] = useState("POST");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const cycleLanguage = () => {
-    const currentIndex = languages.indexOf(language);
-    const nextIndex = (currentIndex + 1) % languages.length;
-    setLanguage(languages[nextIndex]);
-  };
-
-  const togglePrettyPrint = () => {
-    setPrettyPrint(!prettyPrint);
+  const handleSend = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setViewMode(viewMode === "POST" ? "GET" : "POST");
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
     <div>
-      <PrettyPrintToggle enabled={prettyPrint} onToggle={togglePrettyPrint} />
-
-      {prettyPrint ? (
-        <CardView portfolioData={portfolioData} />
+      <RequestBar method={viewMode} onSend={handleSend} />
+      {viewMode === "POST" ? (
+        <CodeView data={portfolioData} />
       ) : (
-        <div>
-          <p>
-            hi! i'm ayman fouad. i like to build things using{" "}
-            <button onClick={cycleLanguage}>{language}</button>
-          </p>
-          <CodeView language={language} />
-        </div>
+        <CardView portfolioData={portfolioData} />
       )}
     </div>
   );
