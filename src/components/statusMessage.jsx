@@ -9,7 +9,7 @@ function StatusMessage({ viewMode, isLoading, showStatus }) {
 
       {isLoading && (
         <div className="text-gray-400">
-          {viewMode === "POST" ? "Raw JSON fetched..." : "Parsing data..."}
+          {viewMode === "POST" ? "Parsing data..." : "Fetching raw data..."}
         </div>
       )}
     </div>

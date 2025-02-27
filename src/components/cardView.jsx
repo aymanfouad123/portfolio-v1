@@ -13,7 +13,7 @@ function CardView({ portfolioData }) {
 
       <div className="bg-[#2D2D2D] p-6 rounded-lg">
         <h2 className="text-code-blue text-xl mb-3 font-mono">contact</h2>
-        <p className="text-gray-300 font-sans">{portfolioData.email}</p>
+        <p className="text-gray-300 font-sans">{portfolioData.contact}</p>
       </div>
 
       <div className="bg-[#2D2D2D] p-6 rounded-lg">

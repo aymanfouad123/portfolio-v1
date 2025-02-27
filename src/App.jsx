@@ -27,31 +27,26 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-code-bg text-white p-8">
-      <div className="max-w-3xl mx-auto space-y-4">
-        {/* RequestBar closer to top */}
-        <div>
+    <div className="min-h-screen bg-[#1E1E1E] flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-2xl">
+        <div className="h-10 flex items-center gap-2 p-4">
           <RequestBar method={viewMode} onSend={handleSend} />
         </div>
 
-        {/* Status message */}
-        <div className="pl-2">
+        {/* <div className="h-full pt-16 px-4 pb-4 overflow-y-auto">
           <StatusMessage
             viewMode={viewMode}
             isLoading={isLoading}
             showStatus={showStatus}
           />
-        </div>
 
-        {/* Content */}
-        <div>
           {showContent &&
             (viewMode === "POST" ? (
               <CodeView data={portfolioData} />
             ) : (
               <CardView portfolioData={portfolioData} />
-            ))}
-        </div>
+            ))} 
+        </div>*/}
       </div>
     </div>
   );
