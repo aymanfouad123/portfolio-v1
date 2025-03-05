@@ -8,61 +8,59 @@ function CodeView({ data }) {
     } else if (value === null) {
       return <span className="text-[#569CD6]">null</span>;
     }
-    // For objects and arrays, stringify them
     return <span className="text-white">{JSON.stringify(value)}</span>;
   };
 
   // Recursive function to render lines of JSON with proper indentation
   const renderLines = (obj, indent = 0, isLast = true) => {
     const lines = [];
-    const indentSpaces = "  ".repeat(indent);
 
-    // Opening brace line
+    // Opening brace on its own line
     lines.push(
-      <div key={`open-${indent}`} className="whitespace-pre-wrap break-words">
-        {indentSpaces}
-        <span className="text-[#DCDCAA]">{"{"}</span>
+      <div key={`open-${indent}`} className="py-[2px]">
+        <div style={{ paddingLeft: `${indent * 20}px` }}>
+          <span className="text-[#DCDCAA]">{"{"}</span>
+        </div>
       </div>
     );
 
-    // Properties
+    // Properties with improved indentation
     Object.entries(obj).forEach(([key, value], index) => {
       const isLastProp = index === Object.entries(obj).length - 1;
       const comma = isLastProp ? "" : ",";
 
       if (typeof value === "object" && value !== null) {
-        // Key for nested object
+        // Key for nested object with better spacing
         lines.push(
-          <div
-            key={`key-${key}-${indent}`}
-            className="whitespace-pre-wrap break-words"
-          >
-            {indentSpaces} <span className="text-[#9CDCFE]">"{key}"</span>:
+          <div key={`key-${key}-${indent}`} className="py-[2px]">
+            <div style={{ paddingLeft: `${indent * 20 + 20}px` }}>
+              <span className="text-[#9CDCFE]">"{key}"</span>:
+            </div>
           </div>
         );
         // Recursively render nested object
         lines.push(...renderLines(value, indent + 1, isLastProp));
       } else {
-        // Key-value pair on single line
+        // Key-value pair with proper spacing
         lines.push(
-          <div
-            key={`pair-${key}-${indent}`}
-            className="whitespace-pre-wrap break-words"
-          >
-            {indentSpaces} <span className="text-[#9CDCFE]">"{key}"</span>:{" "}
-            {renderValue(value)}
-            {comma}
+          <div key={`pair-${key}-${indent}`} className="py-[2px]">
+            <div style={{ paddingLeft: `${indent * 20 + 20}px` }}>
+              <span className="text-[#9CDCFE]">"{key}"</span>:{" "}
+              {renderValue(value)}
+              {comma}
+            </div>
           </div>
         );
       }
     });
 
-    // Closing brace line
+    // Closing brace with proper indentation
     lines.push(
-      <div key={`close-${indent}`} className="whitespace-pre-wrap break-words">
-        {indentSpaces}
-        <span className="text-[#DCDCAA]">{"}"}</span>
-        {!isLast ? "," : ""}
+      <div key={`close-${indent}`} className="py-[2px]">
+        <div style={{ paddingLeft: `${indent * 20}px` }}>
+          <span className="text-[#DCDCAA]">{"}"}</span>
+          {!isLast ? "," : ""}
+        </div>
       </div>
     );
 
@@ -70,9 +68,9 @@ function CodeView({ data }) {
   };
 
   return (
-    <div className="bg-[#1E1E1E] rounded-md p-4 overflow-auto w-full">
+    <div className="bg-[#1E1E1E] rounded-md p-5 overflow-auto w-full border border-[#333333]">
       <div
-        className="text-white font-mono w-full break-words"
+        className="text-white font-mono w-full break-words leading-relaxed"
         style={{
           fontSize: "14px",
           fontFamily:
