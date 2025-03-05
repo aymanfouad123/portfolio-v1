@@ -68,11 +68,11 @@ function CodeView({ data }) {
   };
 
   return (
-    <div className="bg-[#1E1E1E] rounded-md p-5 overflow-auto w-full border border-[#333333]">
+    <div className="bg-[#1E1E1E] rounded-md p-4 h-full border border-[#333333]">
       <div
-        className="text-white font-mono w-full break-words leading-relaxed"
+        className="text-white font-mono w-full h-full break-words leading-relaxed overflow-auto"
         style={{
-          fontSize: "14px",
+          fontSize: "13px",
           fontFamily:
             "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
         }}
