@@ -23,30 +23,37 @@ function App() {
       setShowStatus(true);
       setViewMode(viewMode === "POST" ? "GET" : "POST");
       setShowContent(true);
-    }, 1000);
+    }, 300);
   };
 
   return (
     <div className="min-h-screen bg-[#1E1E1E] flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-2xl">
-        <div className="h-10 flex items-center gap-2 p-4">
+      <div className="w-[700px] bg-[#1E1E1E] rounded-lg p-4 flex flex-col h-[500px]">
+        <div className="mb-3">
           <RequestBar method={viewMode} onSend={handleSend} />
         </div>
 
-        {/* <div className="h-full pt-16 px-4 pb-4 overflow-y-auto">
+        {/* Status message */}
+        <div className="h-5 ml-2">
           <StatusMessage
             viewMode={viewMode}
             isLoading={isLoading}
             showStatus={showStatus}
           />
+        </div>
 
-          {showContent &&
-            (viewMode === "POST" ? (
+        {/* Content area with adjusted height */}
+        <div className="flex-1 overflow-y-auto mt-3 min-h-[350px]">
+          {showContent ? (
+            viewMode === "POST" ? (
               <CodeView data={portfolioData} />
             ) : (
               <CardView portfolioData={portfolioData} />
-            ))} 
-        </div>*/}
+            )
+          ) : (
+            <div className="h-full"></div>
+          )}
+        </div>
       </div>
     </div>
   );
