@@ -5,6 +5,13 @@ function CodeView({ data }) {
   const codeWrapperClasses =
     "text-white w-full h-full break-words overflow-auto";
 
+  // Create a style that will override everything
+  const lightFontStyle = {
+    fontWeight: "200 !important", // Extra light with !important flag
+    WebkitFontSmoothing: "antialiased", // Improves rendering on Webkit browsers
+    MozOsxFontSmoothing: "grayscale", // Improves rendering on Firefox
+  };
+
   // Format a JSON value with proper colors, with special handling for social links
   const renderValue = (value) => {
     if (typeof value === "string") {
@@ -17,13 +24,14 @@ function CodeView({ data }) {
         // Add https:// if missing
         const fullUrl = value.startsWith("http") ? value : `https://${value}`;
         return (
-          <span className="text-[#CE9178] font-normal">
+          <span style={{ color: "#CE9178", ...lightFontStyle }}>
             "
             <a
               href={fullUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-400 hover:text-blue-300 hover:underline"
+              style={{ color: "#6AB0F3", ...lightFontStyle }}
+              className="hover:underline"
             >
               {value}
             </a>
@@ -31,16 +39,22 @@ function CodeView({ data }) {
           </span>
         );
       }
-      return <span className="text-[#CE9178] font-normal">"{value}"</span>;
+      return (
+        <span style={{ color: "#CE9178", ...lightFontStyle }}>"{value}"</span>
+      );
     } else if (typeof value === "number" || typeof value === "boolean") {
       return (
-        <span className="text-[#569CD6] font-normal">{String(value)}</span>
+        <span style={{ color: "#569CD6", ...lightFontStyle }}>
+          {String(value)}
+        </span>
       );
     } else if (value === null) {
-      return <span className="text-[#569CD6] font-normal">null</span>;
+      return <span style={{ color: "#569CD6", ...lightFontStyle }}>null</span>;
     }
     return (
-      <span className="text-white font-normal">{JSON.stringify(value)}</span>
+      <span style={{ color: "white", ...lightFontStyle }}>
+        {JSON.stringify(value)}
+      </span>
     );
   };
 
@@ -52,7 +66,7 @@ function CodeView({ data }) {
     lines.push(
       <div key={`open-${indent}`} className="py-[1px]">
         <div style={{ paddingLeft: `${indent * 20}px` }}>
-          <span className="text-[#FFD700] font-normal">{"{"}</span>
+          <span style={{ color: "#FFD700", ...lightFontStyle }}>{"{"}</span>
         </div>
       </div>
     );
@@ -67,8 +81,16 @@ function CodeView({ data }) {
         lines.push(
           <div key={`key-${key}-${indent}`} className="py-[1px]">
             <div style={{ paddingLeft: `${indent * 20 + 20}px` }}>
-              <span className="text-[#9CDCFE] font-normal pr-2">"{key}"</span>
-              <span className="pr-1">:</span>
+              <span
+                style={{
+                  color: "#9CDCFE",
+                  paddingRight: "8px",
+                  ...lightFontStyle,
+                }}
+              >
+                "{key}"
+              </span>
+              <span style={{ paddingRight: "4px", ...lightFontStyle }}>:</span>
             </div>
           </div>
         );
@@ -79,8 +101,17 @@ function CodeView({ data }) {
         lines.push(
           <div key={`pair-${key}-${indent}`} className="py-[1px]">
             <div style={{ paddingLeft: `${indent * 20 + 20}px` }}>
-              <span className="text-[#9CDCFE] font-normal pr-2">"{key}"</span>
-              <span className="pr-1">:</span> {renderValue(value)}
+              <span
+                style={{
+                  color: "#9CDCFE",
+                  paddingRight: "8px",
+                  ...lightFontStyle,
+                }}
+              >
+                "{key}"
+              </span>
+              <span style={{ paddingRight: "4px", ...lightFontStyle }}>:</span>{" "}
+              {renderValue(value)}
               {comma}
             </div>
           </div>
@@ -92,7 +123,7 @@ function CodeView({ data }) {
     lines.push(
       <div key={`close-${indent}`} className="py-[1px]">
         <div style={{ paddingLeft: `${indent * 20}px` }}>
-          <span className="text-[#FFD700] font-normal">{"}"}</span>
+          <span style={{ color: "#FFD700", ...lightFontStyle }}>{"}"}</span>
           {!isLast ? "," : ""}
         </div>
       </div>
@@ -110,7 +141,7 @@ function CodeView({ data }) {
           lineHeight: "1.25rem",
           fontFamily:
             "ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace",
-          fontWeight: 400, // Changed from 500 to 400 for thinner text
+          ...lightFontStyle,
         }}
       >
         {renderLines(data)}
