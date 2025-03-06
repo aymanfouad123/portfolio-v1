@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 
 function CodeView({ data }) {
   // For mouse tracking
@@ -19,9 +19,9 @@ function CodeView({ data }) {
 
   // Define consistent styling classes
   const codeContainerClasses =
-    "bg-[#1E1E1E] rounded-md p-4 h-full border border-[#252525] relative overflow-hidden";
+    "bg-[#1E1E1E] rounded-md p-4 h-full border border-[#252525] relative overflow-hidden flex items-center justify-center";
   const codeWrapperClasses =
-    "text-white w-full h-full break-words overflow-auto relative z-10";
+    "text-white break-words overflow-auto relative z-10";
 
   // Create a style that will override everything
   const lightFontStyle = {
@@ -137,7 +137,7 @@ function CodeView({ data }) {
       }
     });
 
-    // Closing brace with proper indentation
+    // Closing brace with proper indentation (no extra bottom padding)
     lines.push(
       <div key={`close-${indent}`} className="py-[1px]">
         <div style={{ paddingLeft: `${indent * 20}px` }}>
@@ -183,6 +183,9 @@ function CodeView({ data }) {
           lineHeight: "1.25rem",
           fontFamily:
             "ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace",
+          textAlign: "left",
+          width: "fit-content",
+          maxWidth: "100%",
           ...lightFontStyle,
         }}
       >

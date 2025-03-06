@@ -1,20 +1,23 @@
-function RequestBar({ method, onSend }) {
-  // Determine button color based on method
+import React from "react";
+
+function RequestBar({ onToggleView, currentView }) {
+  // Determine button color based on view mode
+  const methodLabel = currentView === "card" ? "GET" : "POST";
   const buttonColorClass =
-    method === "GET"
-      ? "bg-green-500 hover:bg-green-600"
-      : "bg-blue-500 hover:bg-blue-600";
+    currentView === "card"
+      ? "bg-green-600 hover:bg-green-700"
+      : "bg-blue-600 hover:bg-blue-700";
 
   return (
     <div className="flex items-center gap-2 bg-[#151212] p-2 rounded-md font-sans">
-      <span className="text-gray-300">{method}</span>
+      <span className="text-gray-300">{methodLabel}</span>
       <span className="flex-1 text-gray-400 font-mono text-sm">
-        http://api.portfolio.dev/data
+        https://api.example.com/portfolio
       </span>
       <button
-        onClick={onSend}
+        onClick={onToggleView}
         className={`${buttonColorClass} px-4 py-1.5 rounded-md 
-                   text-sm font-medium transition-colors`}
+                  text-sm font-medium transition-colors text-white`}
       >
         Send
       </button>
