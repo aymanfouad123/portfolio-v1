@@ -1,9 +1,27 @@
+import React, { useState, useRef, useEffect } from "react";
+
 function CodeView({ data }) {
+  // For mouse tracking
+  const [isHovering, setIsHovering] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const codeContainerRef = useRef(null);
+
+  // Track mouse position when hovering
+  const handleMouseMove = (e) => {
+    if (codeContainerRef.current) {
+      const rect = codeContainerRef.current.getBoundingClientRect();
+      setMousePosition({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+    }
+  };
+
   // Define consistent styling classes
   const codeContainerClasses =
-    "bg-[#1E1E1E] rounded-md p-4 h-full border border-[#333333]";
+    "bg-[#1E1E1E] rounded-md p-4 h-full border border-[#252525] relative overflow-hidden";
   const codeWrapperClasses =
-    "text-white w-full h-full break-words overflow-auto";
+    "text-white w-full h-full break-words overflow-auto relative z-10";
 
   // Create a style that will override everything
   const lightFontStyle = {
@@ -133,7 +151,31 @@ function CodeView({ data }) {
   };
 
   return (
-    <div className={codeContainerClasses}>
+    <div
+      ref={codeContainerRef}
+      className={codeContainerClasses}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      onMouseMove={handleMouseMove}
+    >
+      {/* Circular glow that follows the mouse */}
+      {isHovering && (
+        <div
+          className="absolute pointer-events-none transition-opacity duration-200 opacity-40"
+          style={{
+            width: "300px",
+            height: "300px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(180,180,180,0.08) 0%, rgba(0,0,0,0) 85%)",
+            transform: `translate(${mousePosition.x - 150}px, ${
+              mousePosition.y - 150
+            }px)`,
+            zIndex: 5,
+          }}
+        />
+      )}
+
       <div
         className={codeWrapperClasses}
         style={{
