@@ -73,8 +73,7 @@ function CodeView({ data }) {
         className="text-white font-mono w-full h-full break-words leading-relaxed overflow-auto"
         style={{
           fontSize: "13px",
-          fontFamily:
-            "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+          fontFamily: "'Courier New', monospace",
         }}
       >
         {renderLines(data)}
