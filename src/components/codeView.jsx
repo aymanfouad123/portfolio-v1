@@ -10,6 +10,7 @@ function CodeView({ data }) {
   const handleMouseMove = (e) => {
     if (codeContainerRef.current) {
       const rect = codeContainerRef.current.getBoundingClientRect();
+      // Calculate position relative to the container
       setMousePosition({
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
@@ -168,6 +169,9 @@ function CodeView({ data }) {
             borderRadius: "50%",
             background:
               "radial-gradient(circle, rgba(180,180,180,0.08) 0%, rgba(0,0,0,0) 85%)",
+            position: "absolute",
+            top: 0,
+            left: 0,
             transform: `translate(${mousePosition.x - 150}px, ${
               mousePosition.y - 150
             }px)`,
