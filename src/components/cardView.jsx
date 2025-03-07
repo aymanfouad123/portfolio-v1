@@ -4,7 +4,8 @@ function CardView({ portfolioData }) {
   // Reusable classes for consistent styling
   const cardClasses =
     "bg-[#232323] p-4 rounded-lg flex flex-col relative overflow-hidden";
-  const headingClasses = "text-code-blue mb-3 text-xl font-courier font-medium";
+  const headingClasses =
+    "text-orange-400 mb-3 text-xl font-courier font-medium";
   const contentClasses =
     "text-gray-300 flex-1 text-base font-courier font-normal";
   const linkClasses =
