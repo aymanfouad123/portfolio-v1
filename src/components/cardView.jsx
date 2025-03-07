@@ -7,13 +7,12 @@ function CardView({ portfolioData }) {
   // Reusable classes for consistent styling - ensure proper font settings for all content
   const cardClasses =
     "bg-[#232323] p-4 rounded-lg flex flex-col relative overflow-hidden";
-  const headingClasses =
-    "text-orange-400 mb-3 text-xl font-courier font-medium";
-  // Update content classes to be more specific about font properties
+  const headingClasses = "text-orange-400 mb-3 text-xl font-mono font-medium";
+  // Update font size from text-sm to text-base for better readability
   const contentClasses =
-    "text-gray-300 text-base font-courier font-normal leading-relaxed";
+    "text-gray-300 text-base font-mono font-light leading-relaxed";
   const linkClasses =
-    "block text-blue-400 hover:text-blue-300 transition-colors font-courier font-normal hover:underline";
+    "block text-blue-400 hover:text-blue-300 transition-colors font-mono font-light hover:underline";
 
   // Function to format social links properly
   const formatSocialUrl = (url) => {
@@ -91,6 +90,8 @@ function CardView({ portfolioData }) {
                       ? "translateY(0)"
                       : "translateY(10px)",
                   transitionDelay: `${lineNumber * 0.03}s`,
+                  WebkitFontSmoothing: "antialiased",
+                  MozOsxFontSmoothing: "grayscale",
                 }}
               >
                 {word}
