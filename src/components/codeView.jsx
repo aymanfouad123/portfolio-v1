@@ -1,10 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 function CodeView({ data }) {
   // For mouse tracking
   const [isHovering, setIsHovering] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const codeContainerRef = useRef(null);
+
+  // For line-by-line animation
+  const [visibleLines, setVisibleLines] = useState(0);
+  const [renderedLines, setRenderedLines] = useState([]);
 
   // Track mouse position when hovering
   const handleMouseMove = (e) => {
@@ -83,7 +87,10 @@ function CodeView({ data }) {
 
     // Opening brace on its own line
     lines.push(
-      <div key={`open-${indent}`} className="py-[1px]">
+      <div
+        key={`open-${indent}`}
+        className="py-[1px] transition-opacity duration-200 ease-in-out"
+      >
         <div style={{ paddingLeft: `${indent * 20}px` }}>
           <span style={{ color: "#FFD700", ...lightFontStyle }}>{"{"}</span>
         </div>
@@ -98,7 +105,10 @@ function CodeView({ data }) {
       if (typeof value === "object" && value !== null) {
         // Key for nested object with better spacing
         lines.push(
-          <div key={`key-${key}-${indent}`} className="py-[1px]">
+          <div
+            key={`key-${key}-${indent}`}
+            className="py-[1px] transition-opacity duration-200 ease-in-out"
+          >
             <div style={{ paddingLeft: `${indent * 20 + 20}px` }}>
               <span
                 style={{
@@ -118,7 +128,10 @@ function CodeView({ data }) {
       } else {
         // Key-value pair with proper spacing
         lines.push(
-          <div key={`pair-${key}-${indent}`} className="py-[1px]">
+          <div
+            key={`pair-${key}-${indent}`}
+            className="py-[1px] transition-opacity duration-200 ease-in-out"
+          >
             <div style={{ paddingLeft: `${indent * 20 + 20}px` }}>
               <span
                 style={{
@@ -140,7 +153,10 @@ function CodeView({ data }) {
 
     // Closing brace with proper indentation (no extra bottom padding)
     lines.push(
-      <div key={`close-${indent}`} className="py-[1px]">
+      <div
+        key={`close-${indent}`}
+        className="py-[1px] transition-opacity duration-200 ease-in-out"
+      >
         <div style={{ paddingLeft: `${indent * 20}px` }}>
           <span style={{ color: "#FFD700", ...lightFontStyle }}>{"}"}</span>
           {!isLast ? "," : ""}
@@ -150,6 +166,30 @@ function CodeView({ data }) {
 
     return lines;
   };
+
+  // Generate all lines and animate them in useEffect
+  useEffect(() => {
+    const lines = renderLines(data);
+    setRenderedLines(lines);
+
+    // Start with 0 visible lines
+    setVisibleLines(0);
+
+    // Animate lines one-by-one with staggered timing
+    let currentLine = 0;
+    const totalLines = lines.length;
+
+    const animationInterval = setInterval(() => {
+      if (currentLine < totalLines) {
+        setVisibleLines((prev) => prev + 1);
+        currentLine++;
+      } else {
+        clearInterval(animationInterval);
+      }
+    }, 40); // 40ms between each line
+
+    return () => clearInterval(animationInterval);
+  }, [data]);
 
   return (
     <div
@@ -193,7 +233,18 @@ function CodeView({ data }) {
           ...lightFontStyle,
         }}
       >
-        {renderLines(data)}
+        {renderedLines.map((line, index) => (
+          <React.Fragment key={index}>
+            {React.cloneElement(line, {
+              style: {
+                opacity: index < visibleLines ? 1 : 0,
+                transform:
+                  index < visibleLines ? "translateY(0)" : "translateY(10px)",
+                transition: "opacity 0.2s ease-out, transform 0.2s ease-out",
+              },
+            })}
+          </React.Fragment>
+        ))}
       </div>
     </div>
   );
