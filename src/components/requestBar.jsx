@@ -12,7 +12,7 @@ function RequestBar({ onToggleView, currentView }) {
     <div className="flex items-center gap-2 bg-[#151212] p-2 rounded-md font-sans">
       <span className="text-gray-300">{methodLabel}</span>
       <span className="flex-1 text-gray-400 font-mono text-sm">
-        https://api.example.com/portfolio
+        https://aymanfsm.com/portfolio
       </span>
       <button
         onClick={onToggleView}
