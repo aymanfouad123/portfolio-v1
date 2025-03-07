@@ -4,12 +4,14 @@ function CardView({ portfolioData }) {
   // For card animation
   const [visibleCards, setVisibleCards] = useState(0);
 
-  // Reusable classes for consistent styling
+  // Reusable classes for consistent styling - ensure proper font settings for all content
   const cardClasses =
     "bg-[#232323] p-4 rounded-lg flex flex-col relative overflow-hidden";
   const headingClasses =
-    "text-orange-400 mb-3 text-xl font-courier font-medium"; // Remove opacity-0
-  const contentClasses = "text-gray-300 text-base font-courier font-normal";
+    "text-orange-400 mb-3 text-xl font-courier font-medium";
+  // Update content classes to be more specific about font properties
+  const contentClasses =
+    "text-gray-300 text-base font-courier font-normal leading-relaxed";
   const linkClasses =
     "block text-blue-400 hover:text-blue-300 transition-colors font-courier font-normal hover:underline";
 
@@ -39,7 +41,7 @@ function CardView({ portfolioData }) {
     return () => clearInterval(animationInterval);
   }, [portfolioData]);
 
-  // Text animation component for card content
+  // Text animation component for card content - ensure consistent rendering
   function AnimatedText({ text, className }) {
     const [visibleLines, setVisibleLines] = useState(0);
 
@@ -71,7 +73,9 @@ function CardView({ portfolioData }) {
     const words = text.split(" ");
 
     return (
-      <div className={className}>
+      <div className={`${className} flex-1`}>
+        {" "}
+        {/* Add flex-1 to ensure consistent height */}
         {words.map((word, index) => {
           // Group words into "lines" (3 words per line for animation)
           const lineNumber = Math.floor(index / 3);
