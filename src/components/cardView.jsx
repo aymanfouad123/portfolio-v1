@@ -8,7 +8,7 @@ function CardView({ portfolioData }) {
   const cardClasses =
     "bg-[#232323] p-4 rounded-lg flex flex-col relative overflow-hidden";
   const headingClasses =
-    "text-orange-400 mb-3 text-xl font-courier font-medium";
+    "text-orange-400 mb-3 text-xl font-courier font-medium"; // Remove opacity-0
   const contentClasses = "text-gray-300 text-base font-courier font-normal";
   const linkClasses =
     "block text-blue-400 hover:text-blue-300 transition-colors font-courier font-normal hover:underline";
@@ -19,52 +19,50 @@ function CardView({ portfolioData }) {
     return url.startsWith("http") ? url : `https://${url}`;
   };
 
-  // Animate cards appearing one by one
+  // Animate cards appearing one by one - now with faster timing
   useEffect(() => {
     setVisibleCards(0);
 
-    // Longer initial delay for smoother start
-    setTimeout(() => {
-      // Animate cards one-by-one
-      let currentCard = 0;
-      const totalCards = 4; // We have 4 cards
+    // Immediately start animating cards (no initial delay)
+    let currentCard = 0;
+    const totalCards = 4;
 
-      const animationInterval = setInterval(() => {
-        if (currentCard < totalCards) {
-          setVisibleCards((prev) => prev + 1);
-          currentCard++;
-        } else {
-          clearInterval(animationInterval);
-        }
-      }, 120); // Faster timing between cards for more fluid sequence
+    const animationInterval = setInterval(() => {
+      if (currentCard < totalCards) {
+        setVisibleCards((prev) => prev + 1);
+        currentCard++;
+      } else {
+        clearInterval(animationInterval);
+      }
+    }, 100); // Faster interval between cards (was 150ms)
 
-      return () => clearInterval(animationInterval);
-    }, 100);
-
-    // Cleanup on unmount
-    return () => {};
+    return () => clearInterval(animationInterval);
   }, [portfolioData]);
 
-  // Text animation component
+  // Text animation component for card content
   function AnimatedText({ text, className }) {
     const [visibleLines, setVisibleLines] = useState(0);
 
     useEffect(() => {
       setVisibleLines(0);
 
-      let lineIndex = 0;
-      const totalLines = 20; // Maximum lines to animate
+      const animationTimeout = setTimeout(() => {
+        let lineIndex = 0;
+        const totalLines = 30;
 
-      const lineInterval = setInterval(() => {
-        if (lineIndex < totalLines) {
-          setVisibleLines((prev) => prev + 1);
-          lineIndex++;
-        } else {
-          clearInterval(lineInterval);
-        }
-      }, 50);
+        const lineInterval = setInterval(() => {
+          if (lineIndex < totalLines) {
+            setVisibleLines((prev) => prev + 1);
+            lineIndex++;
+          } else {
+            clearInterval(lineInterval);
+          }
+        }, 40); // Faster animation like codeView
 
-      return () => clearInterval(lineInterval);
+        return () => clearInterval(lineInterval);
+      }, 250);
+
+      return () => clearTimeout(animationTimeout);
     }, [text]);
 
     if (!text) return null;
@@ -73,29 +71,40 @@ function CardView({ portfolioData }) {
     const words = text.split(" ");
 
     return (
-      <p className={className}>
+      <div className={className}>
         {words.map((word, index) => {
           // Group words into "lines" (3 words per line for animation)
           const lineNumber = Math.floor(index / 3);
 
           return (
-            <span
-              key={index}
-              className="inline-block transition-all duration-300 ease-out"
-              style={{
-                opacity: lineNumber < visibleLines ? 1 : 0,
-                transform:
-                  lineNumber < visibleLines
-                    ? "translateY(0)"
-                    : "translateY(10px)",
-                transitionDelay: `${lineNumber * 0.03}s`,
-              }}
-            >
-              {word}{" "}
-            </span>
+            <React.Fragment key={index}>
+              <span
+                className="inline-block transition-all duration-300 ease-out"
+                style={{
+                  opacity: lineNumber < visibleLines ? 1 : 0,
+                  transform:
+                    lineNumber < visibleLines
+                      ? "translateY(0)"
+                      : "translateY(10px)",
+                  transitionDelay: `${lineNumber * 0.03}s`,
+                }}
+              >
+                {word}
+              </span>
+              <span
+                className="inline-block"
+                style={{
+                  opacity: lineNumber < visibleLines ? 1 : 0,
+                  marginRight: "0.25em",
+                  transitionDelay: `${lineNumber * 0.03}s`,
+                }}
+              >
+                {" "}
+              </span>
+            </React.Fragment>
           );
         })}
-      </p>
+      </div>
     );
   }
 
@@ -106,19 +115,23 @@ function CardView({ portfolioData }) {
     useEffect(() => {
       setVisibleLines(0);
 
-      let lineIndex = 0;
-      const totalLines = Object.keys(socials).length;
+      const animationTimeout = setTimeout(() => {
+        let lineIndex = 0;
+        const totalLines = Object.keys(socials).length;
 
-      const lineInterval = setInterval(() => {
-        if (lineIndex < totalLines) {
-          setVisibleLines((prev) => prev + 1);
-          lineIndex++;
-        } else {
-          clearInterval(lineInterval);
-        }
-      }, 100);
+        const lineInterval = setInterval(() => {
+          if (lineIndex < totalLines) {
+            setVisibleLines((prev) => prev + 1);
+            lineIndex++;
+          } else {
+            clearInterval(lineInterval);
+          }
+        }, 70);
 
-      return () => clearInterval(lineInterval);
+        return () => clearInterval(lineInterval);
+      }, 250);
+
+      return () => clearTimeout(animationTimeout);
     }, [socials]);
 
     return (
@@ -131,7 +144,7 @@ function CardView({ portfolioData }) {
               opacity: index < visibleLines ? 1 : 0,
               transform:
                 index < visibleLines ? "translateY(0)" : "translateY(10px)",
-              transitionDelay: `${index * 0.1}s`,
+              transitionDelay: `${index * 0.08}s`,
             }}
           >
             <a
@@ -148,11 +161,45 @@ function CardView({ portfolioData }) {
     );
   }
 
-  // Create a component for each card with hover glow effect
+  // Fixed Card title animation
+  function AnimatedTitle({ title, index }) {
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+      // Set initial state to false to avoid flash
+      setIsVisible(false);
+
+      if (index < visibleCards) {
+        // Start title animation sooner
+        const timer = setTimeout(() => {
+          setIsVisible(true);
+        }, 100); // Reduced delay (was 150ms)
+        return () => clearTimeout(timer);
+      }
+
+      return () => {};
+    }, [index, visibleCards]);
+
+    return (
+      <h2
+        className={headingClasses}
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? "translateY(0)" : "translateY(5px)",
+          transition: "opacity 0.3s ease-out, transform 0.3s ease-out",
+          // Ensure absolutely no visibility until animation starts
+          visibility: isVisible ? "visible" : "hidden",
+        }}
+      >
+        {title}
+      </h2>
+    );
+  }
+
+  // Simple card component with faster fade-in transition
   function Card({ title, children, index }) {
     const [isHovering, setIsHovering] = useState(false);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const [visibleLines, setVisibleLines] = useState(0);
     const cardRef = useRef(null);
 
     const handleMouseMove = (e) => {
@@ -165,63 +212,19 @@ function CardView({ portfolioData }) {
       }
     };
 
-    // Start line animation when this card becomes visible
-    useEffect(() => {
-      if (index < visibleCards) {
-        // Reset line counter
-        setVisibleLines(0);
-
-        // Wait a bit after card appears before starting text animation
-        const startDelay = 100 + index * 50;
-
-        setTimeout(() => {
-          // Animate lines one by one
-          let lineIndex = 0;
-          const totalLines = 10; // Maximum number of possible lines
-
-          const lineInterval = setInterval(() => {
-            if (lineIndex < totalLines) {
-              setVisibleLines((prev) => prev + 1);
-              lineIndex++;
-            } else {
-              clearInterval(lineInterval);
-            }
-          }, 50); // 50ms between lines
-
-          return () => clearInterval(lineInterval);
-        }, startDelay);
-      }
-    }, [index, visibleCards]);
-
-    // Calculate unique transition based on card index for cascade effect
-    const getTransitionStyle = () => {
-      // Each card comes from a slightly different angle
-      const directions = [
-        { x: -15, y: 30 }, // About card (top left)
-        { x: 15, y: 30 }, // Work card (top right)
-        { x: -15, y: 15 }, // Contact card (bottom left)
-        { x: 15, y: 15 }, // Socials card (bottom right)
-      ];
-
-      const dir = directions[index];
-      const delay = index * 0.08; // Slightly faster
-
-      return {
-        opacity: index < visibleCards ? 1 : 0,
-        transform:
-          index < visibleCards
-            ? "translateY(0) translateX(0) scale(1)"
-            : `translateY(${dir.y}px) translateX(${dir.x}px) scale(0.95)`,
-        transition: `opacity 0.5s cubic-bezier(0.34, 1.2, 0.64, 1) ${delay}s, 
-                     transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1) ${delay}s`,
-      };
+    // Faster transition with shorter delay
+    const cardStyle = {
+      opacity: index < visibleCards ? 1 : 0,
+      transform: index < visibleCards ? "translateY(0)" : "translateY(10px)",
+      transition: `opacity 0.3s ease-out ${index * 0.08}s, 
+                   transform 0.3s ease-out ${index * 0.08}s`,
     };
 
     return (
       <div
         ref={cardRef}
         className={cardClasses}
-        style={getTransitionStyle()}
+        style={cardStyle}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         onMouseMove={handleMouseMove}
@@ -246,7 +249,7 @@ function CardView({ portfolioData }) {
             }}
           />
         )}
-        <h2 className={headingClasses}>{title}</h2>
+        <AnimatedTitle title={title} index={index} />
         <div className="relative z-10">{children}</div>
       </div>
     );
