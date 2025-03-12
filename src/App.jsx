@@ -7,45 +7,37 @@ import StatusMessage from "./components/statusMessage";
 import TabSelector from "./components/tabSelector";
 
 function App() {
-  // Group related state variables together for better organization
+  // Core view state - all we need
   const [viewMode, setViewMode] = useState("code");
-  const [uiState, setUiState] = useState({
-    isLoading: false,
-    showContent: true,
-    showStatus: false, // Initialize as false to hide status initially
-    requestMethod: "GET", // Added to track the simulated API request method
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [showStatus, setShowStatus] = useState(false);
 
-  // Toggle between card and code view modes with simulated API request
+  // Simple toggle function
   const toggleViewMode = () => {
-    // Start loading with the appropriate request method for the target view
-    const targetView = viewMode === "card" ? "code" : "card";
-    const requestMethod = targetView === "card" ? "POST" : "GET";
+    // Don't toggle if already loading
+    if (isLoading) return;
 
-    // Hide content and show loading state with appropriate method
-    setUiState({
-      isLoading: true,
-      showContent: false,
-      showStatus: true, // Show status when toggling views
-      requestMethod: requestMethod,
+    // Show loading state and status
+    setIsLoading(true);
+    setShowStatus(true);
+
+    // Use requestAnimationFrame to ensure smooth transition
+    requestAnimationFrame(() => {
+      // Use setTimeout to ensure CSS transitions have time to start
+      setTimeout(() => {
+        // Toggle the view
+        setViewMode(viewMode === "card" ? "code" : "card");
+
+        // Hide loading after a short delay
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 400);
+      }, 50);
     });
-
-    // Simulate network request time
-    setTimeout(() => {
-      // Update view mode
-      setViewMode(targetView);
-
-      // Show content and success status
-      setUiState({
-        isLoading: false,
-        showContent: true,
-        showStatus: true, // Keep status visible after loading
-        requestMethod: requestMethod,
-      });
-    }, 600); // Longer delay to make the loading state visible
   };
 
-  // Determine active tab name based on current view mode
+  // Simple derived state
+  const requestMethod = viewMode === "card" ? "POST" : "GET";
   const activeTabName = viewMode === "card" ? "Preview" : "Pretty Print";
 
   return (
@@ -53,7 +45,11 @@ function App() {
       <div className="w-[700px] rounded-lg p-4 flex flex-col h-[530px]">
         {/* Top navigation bar */}
         <div className="mb-3">
-          <RequestBar onToggleView={toggleViewMode} currentView={viewMode} />
+          <RequestBar
+            onToggleView={toggleViewMode}
+            currentView={viewMode}
+            disabled={isLoading}
+          />
         </div>
 
         {/* Tab selector area with status message on the right */}
@@ -62,29 +58,33 @@ function App() {
             <TabSelector activeTabName={activeTabName} />
           </div>
 
-          {/* Status message positioned on the right of tabs - only shown after first click */}
+          {/* Status message positioned on the right of tabs */}
           <div className="ml-2">
-            {uiState.showStatus && (
+            {showStatus && (
               <StatusMessage
-                viewMode={uiState.requestMethod}
-                isLoading={uiState.isLoading}
-                showStatus={uiState.showStatus}
+                viewMode={requestMethod}
+                isLoading={isLoading}
+                showStatus={true}
               />
             )}
           </div>
         </div>
 
-        {/* Main content area */}
-        <div className="flex-1 overflow-y-auto mt-3 min-h-[380px]">
-          {uiState.showContent ? (
-            viewMode === "card" ? (
+        {/* Main content area with clean transitions */}
+        <div className="flex-1 mt-3 min-h-[380px] relative overflow-hidden">
+          <div
+            className="w-full h-full transition-all duration-300 ease-out will-change-opacity will-change-transform"
+            style={{
+              opacity: isLoading ? 0 : 1,
+              transform: isLoading ? "scale(0.98)" : "scale(1)",
+            }}
+          >
+            {viewMode === "card" ? (
               <CardView portfolioData={portfolioData} />
             ) : (
               <CodeView data={portfolioData} />
-            )
-          ) : (
-            <div className="h-full"></div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

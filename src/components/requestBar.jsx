@@ -1,23 +1,35 @@
 import React from "react";
 
-function RequestBar({ onToggleView, currentView }) {
-  // Determine button color based on view mode
-  const methodLabel = currentView === "card" ? "GET" : "POST";
-  const buttonColorClass =
-    currentView === "card"
-      ? "bg-green-600 hover:bg-green-700"
-      : "bg-blue-600 hover:bg-blue-700";
+function RequestBar({ onToggleView, currentView, disabled }) {
+  // Determine if button should be in GET or POST state
+  const isGet = currentView === "code";
+  const buttonText = isGet ? "GET" : "POST";
+  const url = "https://ayman.fyi/portfolio";
 
   return (
-    <div className="flex items-center gap-2 bg-[#151212] p-2 rounded-md font-sans">
-      <span className="text-gray-300">{methodLabel}</span>
-      <span className="flex-1 text-gray-400 font-mono text-sm">
-        https://ayman.fyi/portfolio
-      </span>
+    <div className="flex items-center bg-[#171717] rounded-md w-full overflow-hidden">
+      {/* Method button */}
       <button
         onClick={onToggleView}
-        className={`${buttonColorClass} px-4 py-1.5 rounded-md 
-                  text-sm font-medium transition-colors text-white`}
+        disabled={disabled}
+        className={`px-4 py-2 font-mono text-base font-medium transition-colors duration-200 ${
+          isGet ? "text-blue-400" : "text-green-400"
+        } ${disabled ? "opacity-50 cursor-not-allowed" : "hover:text-white"}`}
+      >
+        {buttonText}
+      </button>
+
+      {/* URL display */}
+      <div className="font-mono text-gray-400 pl-2 py-2 flex-1 truncate">
+        {url}
+      </div>
+
+      {/* Send button */}
+      <button
+        onClick={onToggleView}
+        disabled={disabled}
+        className={`bg-green-600 text-white font-medium py-2 px-6 transition-all duration-200 
+        ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-green-500"}`}
       >
         Send
       </button>
