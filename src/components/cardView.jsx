@@ -35,7 +35,7 @@ function CardView({ portfolioData }) {
       } else {
         clearInterval(animationInterval);
       }
-    }, 100); // Faster interval between cards (was 150ms)
+    }, 50); // Reduced from 100ms to 50ms to match CodeView speed
 
     return () => clearInterval(animationInterval);
   }, [portfolioData]);
@@ -58,10 +58,10 @@ function CardView({ portfolioData }) {
           } else {
             clearInterval(lineInterval);
           }
-        }, 40); // Faster animation like codeView
+        }, 20); // Reduced from 40ms to 20ms to match CodeView speed
 
         return () => clearInterval(lineInterval);
-      }, 250);
+      }, 100); // Reduced from 250ms to 100ms
 
       return () => clearTimeout(animationTimeout);
     }, [text]);
@@ -89,7 +89,7 @@ function CardView({ portfolioData }) {
                     lineNumber < visibleLines
                       ? "translateY(0)"
                       : "translateY(10px)",
-                  transitionDelay: `${lineNumber * 0.03}s`,
+                  transitionDelay: `${lineNumber * 0.02}s`, // Reduced from 0.03s to 0.02s
                   WebkitFontSmoothing: "antialiased",
                   MozOsxFontSmoothing: "grayscale",
                 }}
@@ -101,7 +101,7 @@ function CardView({ portfolioData }) {
                 style={{
                   opacity: lineNumber < visibleLines ? 1 : 0,
                   marginRight: "0.25em",
-                  transitionDelay: `${lineNumber * 0.03}s`,
+                  transitionDelay: `${lineNumber * 0.02}s`, // Reduced from 0.03s to 0.02s
                 }}
               >
                 {" "}
@@ -131,10 +131,10 @@ function CardView({ portfolioData }) {
           } else {
             clearInterval(lineInterval);
           }
-        }, 70);
+        }, 40); // Reduced from 70ms to 40ms
 
         return () => clearInterval(lineInterval);
-      }, 250);
+      }, 100); // Reduced from 250ms to 100ms
 
       return () => clearTimeout(animationTimeout);
     }, [socials]);
@@ -149,7 +149,7 @@ function CardView({ portfolioData }) {
               opacity: index < visibleLines ? 1 : 0,
               transform:
                 index < visibleLines ? "translateY(0)" : "translateY(10px)",
-              transitionDelay: `${index * 0.08}s`,
+              transitionDelay: `${index * 0.05}s`, // Reduced from 0.08s to 0.05s
             }}
           >
             <a
@@ -178,7 +178,7 @@ function CardView({ portfolioData }) {
         // Start title animation sooner
         const timer = setTimeout(() => {
           setIsVisible(true);
-        }, 100); // Reduced delay (was 150ms)
+        }, 50); // Reduced from 100ms to 50ms
         return () => clearTimeout(timer);
       }
 
@@ -191,7 +191,7 @@ function CardView({ portfolioData }) {
         style={{
           opacity: isVisible ? 1 : 0,
           transform: isVisible ? "translateY(0)" : "translateY(5px)",
-          transition: "opacity 0.3s ease-out, transform 0.3s ease-out",
+          transition: "opacity 0.2s ease-out, transform 0.2s ease-out", // Reduced from 0.3s to 0.2s
           // Ensure absolutely no visibility until animation starts
           visibility: isVisible ? "visible" : "hidden",
         }}
@@ -217,12 +217,10 @@ function CardView({ portfolioData }) {
       }
     };
 
-    // Faster transition with shorter delay
+    // Remove transition and always show cards with opacity 1
     const cardStyle = {
-      opacity: index < visibleCards ? 1 : 0,
-      transform: index < visibleCards ? "translateY(0)" : "translateY(10px)",
-      transition: `opacity 0.3s ease-out ${index * 0.08}s, 
-                   transform 0.3s ease-out ${index * 0.08}s`,
+      opacity: 1,
+      transform: "translateY(0)",
     };
 
     return (

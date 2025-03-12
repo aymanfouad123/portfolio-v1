@@ -1,15 +1,21 @@
 function StatusMessage({ viewMode, isLoading, showStatus }) {
-  if (!isLoading && !showStatus) return null;
+  // Always show some form of status, don't return null
 
   return (
-    <div className="space-y-1 font-mono text-sm">
-      {!isLoading && showStatus && (
-        <div className="text-emerald-400">Status: 200 OK</div>
-      )}
-
+    <div className="space-y-1 font-mono text-sm text-right">
+      {/* Loading state has priority */}
       {isLoading && (
         <div className="text-gray-400">
-          {viewMode === "POST" ? "Parsing data..." : "Fetching raw data..."}
+          {viewMode === "POST" ? "Posting data..." : "Fetching data..."}
+        </div>
+      )}
+
+      {/* Show success status when not loading */}
+      {!isLoading && (
+        <div className="text-emerald-400">
+          {viewMode === "POST"
+            ? "POST Status: 200 Created"
+            : "GET Status: 200 OK"}
         </div>
       )}
     </div>
