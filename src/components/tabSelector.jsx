@@ -1,24 +1,35 @@
 import React from "react";
 
-function TabSelector({ activeTabName = "Pretty Print" }) {
+function TabSelector({ activeTabName }) {
+  // Tab options
   const tabs = ["Pretty Print", "Preview"];
 
-  const tabClasses = (tab) => {
-    const baseClasses =
-      "px-4 py-2 text-sm font-sans border-t border-l border-r rounded-t-md transition-colors";
-
-    return tab === activeTabName
-      ? `${baseClasses} bg-[#1E1E1E] text-orange-400 border-[#252525]`
-      : `${baseClasses} bg-[#161616] text-gray-400 border-[#222222]`;
-  };
-
   return (
-    <div className="flex space-x-1 mb-[-1px] z-20 relative">
-      {tabs.map((tab) => (
-        <div key={tab} className={tabClasses(tab)}>
-          {tab}
-        </div>
-      ))}
+    <div className="flex rounded-t-md overflow-hidden bg-[#171717] border-b border-[#232323]">
+      {tabs.map((tabName) => {
+        const isActive = tabName === activeTabName;
+
+        return (
+          <div
+            key={tabName}
+            className={`relative px-5 py-2 font-mono text-sm cursor-default transition-all ${
+              isActive
+                ? "text-blue-400 bg-[#232323]"
+                : "text-gray-400 hover:text-gray-300 bg-[#171717]"
+            }`}
+          >
+            {tabName}
+
+            {/* Active indicator line */}
+            {isActive && (
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400" />
+            )}
+          </div>
+        );
+      })}
+
+      {/* Fill remaining space with tab bar background */}
+      <div className="flex-grow bg-[#171717]"></div>
     </div>
   );
 }

@@ -7,37 +7,44 @@ import StatusMessage from "./components/statusMessage";
 import TabSelector from "./components/tabSelector";
 
 function App() {
-  // Core view state - all we need
+  // Core view state
   const [viewMode, setViewMode] = useState("code");
   const [isLoading, setIsLoading] = useState(false);
   const [showStatus, setShowStatus] = useState(false);
+  const [requestMethod, setRequestMethod] = useState("GET");
 
-  // Simple toggle function
+  // Simple toggle function with stable status updates
   const toggleViewMode = () => {
     // Don't toggle if already loading
     if (isLoading) return;
 
-    // Show loading state and status
+    // Calculate next view and request method
+    const nextView = viewMode === "card" ? "code" : "card";
+    const nextMethod = nextView === "card" ? "POST" : "GET";
+
+    // Set request method first, before any visual changes
+    setRequestMethod(nextMethod);
+
+    // Then enable status and loading in the same batch
     setIsLoading(true);
     setShowStatus(true);
 
-    // Use requestAnimationFrame to ensure smooth transition
+    // Use requestAnimationFrame for visual transitions
     requestAnimationFrame(() => {
-      // Use setTimeout to ensure CSS transitions have time to start
+      // Let the loading state render first
       setTimeout(() => {
-        // Toggle the view
-        setViewMode(viewMode === "card" ? "code" : "card");
+        // Switch view mode
+        setViewMode(nextView);
 
-        // Hide loading after a short delay
+        // Wait for animation to complete before removing loading state
         setTimeout(() => {
           setIsLoading(false);
         }, 400);
-      }, 50);
+      }, 100);
     });
   };
 
   // Simple derived state
-  const requestMethod = viewMode === "card" ? "POST" : "GET";
   const activeTabName = viewMode === "card" ? "Preview" : "Pretty Print";
 
   return (
@@ -59,7 +66,7 @@ function App() {
           </div>
 
           {/* Status message positioned on the right of tabs */}
-          <div className="ml-2">
+          <div className="ml-2 min-w-[140px] text-right">
             {showStatus && (
               <StatusMessage
                 viewMode={requestMethod}
