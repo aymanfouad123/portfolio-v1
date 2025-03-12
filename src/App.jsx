@@ -7,36 +7,31 @@ import StatusMessage from "./components/statusMessage";
 import TabSelector from "./components/tabSelector";
 
 function App() {
-  // Core view state
+  // Main state variables
   const [viewMode, setViewMode] = useState("code");
   const [isLoading, setIsLoading] = useState(false);
   const [showStatus, setShowStatus] = useState(false);
   const [requestMethod, setRequestMethod] = useState("GET");
 
-  // Simple toggle function with stable status updates
+  // Handle switching between code and card views
   const toggleViewMode = () => {
-    // Don't toggle if already loading
+    // Don't do anything if already loading
     if (isLoading) return;
 
-    // Calculate next view and request method
+    // Figure out which view to show next
     const nextView = viewMode === "card" ? "code" : "card";
     const nextMethod = nextView === "card" ? "POST" : "GET";
 
-    // Set request method first, before any visual changes
+    // Start the transition
     setRequestMethod(nextMethod);
-
-    // Then enable status and loading in the same batch
     setIsLoading(true);
     setShowStatus(true);
 
-    // Use requestAnimationFrame for visual transitions
+    // Animation logic with timeouts
     requestAnimationFrame(() => {
-      // Let the loading state render first
       setTimeout(() => {
-        // Switch view mode
         setViewMode(nextView);
 
-        // Wait for animation to complete before removing loading state
         setTimeout(() => {
           setIsLoading(false);
         }, 400);
@@ -44,13 +39,13 @@ function App() {
     });
   };
 
-  // Simple derived state
+  // Which tab is active depends on the view
   const activeTabName = viewMode === "card" ? "Preview" : "Pretty Print";
 
   return (
     <div className="flex flex-col items-center justify-center p-4 bg-stone-900 min-h-screen selection:bg-yellow-800 bg-[radial-gradient(#1f2937_1px,transparent_1px)] [background-size:16px_16px]">
       <div className="w-[700px] rounded-lg p-4 flex flex-col h-[530px]">
-        {/* Top navigation bar */}
+        {/* Top bar with request buttons */}
         <div className="mb-3">
           <RequestBar
             onToggleView={toggleViewMode}
@@ -59,13 +54,12 @@ function App() {
           />
         </div>
 
-        {/* Tab selector area with status message on the right */}
+        {/* Tab selector row */}
         <div className="flex items-center justify-between">
           <div className="flex-grow">
             <TabSelector activeTabName={activeTabName} />
           </div>
 
-          {/* Status message positioned on the right of tabs */}
           <div className="ml-2 min-w-[140px] text-right">
             {showStatus && (
               <StatusMessage
@@ -77,7 +71,7 @@ function App() {
           </div>
         </div>
 
-        {/* Main content area with clean transitions */}
+        {/* Main content area */}
         <div className="flex-1 mt-3 min-h-[380px] relative overflow-hidden">
           <div
             className="w-full h-full transition-all duration-300 ease-out will-change-opacity will-change-transform"

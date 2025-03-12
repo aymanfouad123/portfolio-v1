@@ -5,31 +5,30 @@ function TabSelector({ activeTabName }) {
   const tabs = ["Pretty Print", "Preview"];
 
   return (
-    <div className="flex rounded-t-md overflow-hidden bg-[#171717] border-b border-[#232323]">
-      {tabs.map((tabName) => {
-        const isActive = tabName === activeTabName;
+    <div className="inline-flex bg-[#121212] rounded-md p-1 text-sm">
+      {tabs.map((tab) => {
+        const isActive = tab === activeTabName;
 
         return (
           <div
-            key={tabName}
-            className={`relative px-5 py-2 font-mono text-sm cursor-default transition-all ${
-              isActive
-                ? "text-blue-400 bg-[#232323]"
-                : "text-gray-400 hover:text-gray-300 bg-[#171717]"
-            }`}
+            key={tab}
+            className={`
+              px-3 py-1 rounded-md font-mono transition-colors duration-200
+              ${
+                isActive
+                  ? "bg-[#232323] text-gray-200"
+                  : "text-gray-500 hover:text-gray-400"
+              }
+            `}
+            style={{
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+            }}
           >
-            {tabName}
-
-            {/* Active indicator line */}
-            {isActive && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400" />
-            )}
+            {tab}
           </div>
         );
       })}
-
-      {/* Fill remaining space with tab bar background */}
-      <div className="flex-grow bg-[#171717]"></div>
     </div>
   );
 }
