@@ -5,7 +5,7 @@ function TabSelector({ activeTabName }) {
   const tabs = ["Pretty Print", "Preview"];
 
   return (
-    <div className="inline-flex bg-[#121212] rounded-md p-1 text-sm">
+    <div className="inline-flex bg-[#121212] rounded-md p-1 text-sm md:text-sm text-xs">
       {tabs.map((tab) => {
         const isActive = tab === activeTabName;
 

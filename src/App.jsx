@@ -53,10 +53,11 @@ function App() {
   const activeTabName = viewMode === "card" ? "Preview" : "Pretty Print";
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 bg-stone-900 min-h-screen selection:bg-yellow-800 bg-[radial-gradient(#1f2937_1px,transparent_1px)] [background-size:16px_16px]">
-      <div className="w-[700px] rounded-lg p-4 flex flex-col h-[530px]">
+    <div className="flex flex-col items-center justify-center p-4 md:p-4 p-2 bg-stone-900 min-h-screen selection:bg-yellow-800 bg-[radial-gradient(#1f2937_1px,transparent_1px)] [background-size:16px_16px]">
+      {/* Responsive container: fixed width on desktop, full width on mobile */}
+      <div className="w-full md:w-[700px] rounded-lg p-4 md:p-4 p-3 flex flex-col md:h-[530px] h-auto">
         {/* Top bar with request buttons */}
-        <div className="mb-3">
+        <div className="mb-3 md:mb-3 mb-2">
           <RequestBar
             onToggleView={toggleViewMode}
             currentView={viewMode}
@@ -64,13 +65,13 @@ function App() {
           />
         </div>
 
-        {/* Tab selector row */}
-        <div className="flex items-center justify-between">
-          <div className="flex-grow">
+        {/* Tab selector row - stack vertically on mobile */}
+        <div className="flex md:flex-row flex-col md:items-center items-start justify-between md:mb-0 mb-2">
+          <div className="flex-grow md:mb-0 mb-2">
             <TabSelector activeTabName={activeTabName} />
           </div>
 
-          <div className="ml-2 min-w-[140px] text-right">
+          <div className="md:ml-2 ml-0 min-w-[140px] md:text-right text-left">
             {showStatus && (
               <StatusMessage
                 viewMode={requestMethod}
@@ -82,7 +83,7 @@ function App() {
         </div>
 
         {/* Main content area with hardware-accelerated transitions */}
-        <div className="flex-1 mt-3 min-h-[380px] relative overflow-hidden">
+        <div className="flex-1 mt-3 md:min-h-[380px] min-h-[500px] relative overflow-hidden">
           <div
             className="w-full h-full transition-all duration-250 ease-out will-change-opacity will-change-transform"
             style={{
@@ -104,7 +105,7 @@ function App() {
       </div>
 
       {/* Copyright footer */}
-      <div className="text-gray-500 text-sm font-mono mt-8 mb-2 opacity-70">
+      <div className="text-gray-500 text-sm font-mono mt-8 mb-6 opacity-70">
         2025 © Ayman Fouad
       </div>
     </div>

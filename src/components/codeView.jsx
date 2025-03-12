@@ -23,7 +23,7 @@ function CodeView({ data, skipAnimation = false }) {
 
   // Some styling classes to keep things organized
   const containerStyle =
-    "bg-[#1E1E1E] rounded-md p-4 h-full border border-[#252525] relative overflow-hidden flex items-center justify-center";
+    "bg-[#1E1E1E] rounded-md p-4 md:p-4 p-2 h-full border border-[#252525] relative overflow-hidden flex items-center justify-center";
   const codeStyle = "text-white break-words overflow-auto relative z-10";
 
   // Makes the font look nice and light
@@ -242,6 +242,7 @@ function CodeView({ data, skipAnimation = false }) {
                     transition:
                       "opacity 0.2s ease-out, transform 0.2s ease-out",
                   },
+              className: "md:text-sm text-xs",
             })}
           </React.Fragment>
         ))}

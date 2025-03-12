@@ -8,7 +8,7 @@ function CardView({ portfolioData }) {
     "bg-[#232323] p-4 rounded-lg flex flex-col relative overflow-hidden";
   const titleStyle = "text-orange-400 mb-3 text-xl font-mono font-medium";
   const textStyle =
-    "text-gray-300 text-base font-mono font-light leading-relaxed tracking-tight whitespace-pre-wrap break-words";
+    "text-gray-300 text-base md:text-base text-sm font-mono font-light leading-relaxed tracking-tight whitespace-pre-wrap break-words";
   const linkStyle =
     "block text-blue-400 hover:text-blue-300 transition-colors font-mono font-light tracking-tight hover:underline";
 
@@ -48,7 +48,7 @@ function CardView({ portfolioData }) {
     return (
       <div
         ref={cardRef}
-        className={`${cardStyle} transition-all duration-300 ease-out`}
+        className={`${cardStyle} transition-all duration-300 ease-out md:mb-0 mb-3`}
         style={{
           opacity: index < visibleCards ? 1 : 0,
           transform:
@@ -136,7 +136,7 @@ function CardView({ portfolioData }) {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 h-full">
+    <div className="grid md:grid-cols-2 grid-cols-1 gap-4 h-full">
       <Card title="about" index={0}>
         <TextContent text={portfolioData.aboutme} className={textStyle} />
       </Card>
