@@ -8,11 +8,11 @@ function CardView({ portfolioData }) {
   const cardClasses =
     "bg-[#232323] p-4 rounded-lg flex flex-col relative overflow-hidden";
   const headingClasses = "text-orange-400 mb-3 text-xl font-mono font-medium";
-  // Update font size from text-sm to text-base for better readability
+  // Update styling to match codeView's text appearance with proper letter-spacing and word-spacing
   const contentClasses =
-    "text-gray-300 text-base font-mono font-light leading-relaxed";
+    "text-gray-300 text-base font-mono font-light leading-relaxed tracking-tight whitespace-pre-wrap break-words";
   const linkClasses =
-    "block text-blue-400 hover:text-blue-300 transition-colors font-mono font-light hover:underline";
+    "block text-blue-400 hover:text-blue-300 transition-colors font-mono font-light tracking-tight hover:underline";
 
   // Function to format social links properly
   const formatSocialUrl = (url) => {
@@ -41,8 +41,10 @@ function CardView({ portfolioData }) {
   }, [portfolioData]);
 
   // Text animation component for card content - ensure consistent rendering
-  function AnimatedText({ text, className }) {
+  function AnimatedText({ text, className, isWorkCard = false }) {
     const [visibleLines, setVisibleLines] = useState(0);
+    const [cursorPosition, setCursorPosition] = useState(2); // Line where cursor appears
+    const lineRefs = useRef([]);
 
     useEffect(() => {
       setVisibleLines(0);
@@ -68,45 +70,89 @@ function CardView({ portfolioData }) {
 
     if (!text) return null;
 
-    // Split text into words to create a more natural animation
-    const words = text.split(" ");
+    // Clean and prepare the text for proper display
+    const cleanText = text.trim(); // Remove extra whitespace at start/end
+
+    // Split text into lines with proper handling of empty lines
+    const lines = cleanText.split("\n").map((line) => line.trim()); // Remove any leading/trailing spaces
+
+    // Make sure our ref array is the correct length
+    if (lineRefs.current.length !== lines.length) {
+      lineRefs.current = Array(lines.length)
+        .fill(null)
+        .map((_, i) => lineRefs.current[i] || React.createRef());
+    }
 
     return (
-      <div className={`${className} flex-1`}>
-        {" "}
-        {/* Add flex-1 to ensure consistent height */}
-        {words.map((word, index) => {
-          // Group words into "lines" (3 words per line for animation)
-          const lineNumber = Math.floor(index / 3);
+      <div className={`${className} flex-1 relative`}>
+        {lines.map((line, lineIdx) => {
+          // Split each line by words but preserve spacing patterns
+          const words = line.split(/(\s+)/);
 
           return (
-            <React.Fragment key={index}>
-              <span
-                className="inline-block transition-all duration-300 ease-out"
-                style={{
-                  opacity: lineNumber < visibleLines ? 1 : 0,
-                  transform:
-                    lineNumber < visibleLines
-                      ? "translateY(0)"
-                      : "translateY(10px)",
-                  transitionDelay: `${lineNumber * 0.02}s`, // Reduced from 0.03s to 0.02s
-                  WebkitFontSmoothing: "antialiased",
-                  MozOsxFontSmoothing: "grayscale",
-                }}
-              >
-                {word}
-              </span>
-              <span
-                className="inline-block"
-                style={{
-                  opacity: lineNumber < visibleLines ? 1 : 0,
-                  marginRight: "0.25em",
-                  transitionDelay: `${lineNumber * 0.02}s`, // Reduced from 0.03s to 0.02s
-                }}
-              >
-                {" "}
-              </span>
-            </React.Fragment>
+            <div
+              key={lineIdx}
+              className="relative"
+              ref={lineRefs.current[lineIdx]}
+            >
+              {words.map((word, index) => {
+                // Skip rendering empty strings
+                if (word === "") return null;
+
+                // Determine if this is a space sequence or an actual word
+                const isSpace = /^\s+$/.test(word);
+
+                // Group words for animation
+                const animLineNumber = lineIdx;
+
+                if (isSpace) {
+                  // Special handling for spaces - keep them simple
+                  return (
+                    <span
+                      key={`${lineIdx}-${index}`}
+                      className="inline-block"
+                      style={{
+                        opacity: animLineNumber < visibleLines ? 1 : 0,
+                        transitionDelay: `${animLineNumber * 0.02}s`,
+                      }}
+                    >
+                      {word}
+                    </span>
+                  );
+                }
+
+                return (
+                  <span
+                    key={`${lineIdx}-${index}`}
+                    className="inline-block transition-all duration-300 ease-out"
+                    style={{
+                      opacity: animLineNumber < visibleLines ? 1 : 0,
+                      transform:
+                        animLineNumber < visibleLines
+                          ? "translateY(0)"
+                          : "translateY(10px)",
+                      transitionDelay: `${animLineNumber * 0.02}s`,
+                      WebkitFontSmoothing: "antialiased",
+                      MozOsxFontSmoothing: "grayscale",
+                    }}
+                  >
+                    {word}
+                  </span>
+                );
+              })}
+
+              {/* Cursor overlay for work card - absolute positioned to not affect layout */}
+              {isWorkCard && lineIdx === cursorPosition && (
+                <div
+                  className="absolute left-0 top-0 h-full w-1.5 bg-amber-600"
+                  style={{
+                    transform: "translateX(-8px)", // Position it to the left of the text
+                    opacity: lineIdx < visibleLines ? 1 : 0,
+                    transition: "opacity 0.3s ease-out",
+                  }}
+                ></div>
+              )}
+            </div>
           );
         })}
       </div>
@@ -265,7 +311,11 @@ function CardView({ portfolioData }) {
       </Card>
 
       <Card title="work" index={1}>
-        <AnimatedText text={portfolioData.work} className={contentClasses} />
+        <AnimatedText
+          text={portfolioData.work}
+          className={contentClasses}
+          isWorkCard={true}
+        />
       </Card>
 
       <Card title="contact" index={2}>
