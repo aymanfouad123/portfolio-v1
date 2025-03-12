@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 
-function CodeView({ data }) {
+function CodeView({ data, skipAnimation = false }) {
   // Keep track of mouse position for the cool glow effect
   const [isHovering, setIsHovering] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -159,25 +159,31 @@ function CodeView({ data }) {
     const lines = createCodeLines(data);
     setRenderedLines(lines);
 
-    // Reset animation
-    setVisibleLines(0);
+    // Reset animation or show all lines immediately if skipping animation
+    if (skipAnimation) {
+      // Show all lines immediately without animation when transitioning from card view
+      setVisibleLines(lines.length);
+    } else {
+      // Reset animation
+      setVisibleLines(0);
 
-    // Show lines one by one
-    let lineCount = 0;
-    const totalLines = lines.length;
+      // Show lines one by one
+      let lineCount = 0;
+      const totalLines = lines.length;
 
-    const animation = setInterval(() => {
-      if (lineCount < totalLines) {
-        setVisibleLines((prev) => prev + 1);
-        lineCount++;
-      } else {
-        clearInterval(animation);
-      }
-    }, 40); // Shows a new line every 40ms
+      const animation = setInterval(() => {
+        if (lineCount < totalLines) {
+          setVisibleLines((prev) => prev + 1);
+          lineCount++;
+        } else {
+          clearInterval(animation);
+        }
+      }, 40); // Shows a new line every 40ms
 
-    // Clean up when component unmounts
-    return () => clearInterval(animation);
-  }, [data]);
+      // Clean up
+      return () => clearInterval(animation);
+    }
+  }, [data, skipAnimation]);
 
   return (
     <div
@@ -221,16 +227,21 @@ function CodeView({ data }) {
           ...lightFont,
         }}
       >
-        {/* Each line fades in one by one */}
+        {/* Each line fades in one by one (or all at once if skipAnimation is true) */}
         {renderedLines.map((line, index) => (
           <React.Fragment key={index}>
             {React.cloneElement(line, {
-              style: {
-                opacity: index < visibleLines ? 1 : 0,
-                transform:
-                  index < visibleLines ? "translateY(0)" : "translateY(10px)",
-                transition: "opacity 0.2s ease-out, transform 0.2s ease-out",
-              },
+              style: skipAnimation
+                ? { opacity: 1, transform: "translateY(0)" }
+                : {
+                    opacity: index < visibleLines ? 1 : 0,
+                    transform:
+                      index < visibleLines
+                        ? "translateY(0)"
+                        : "translateY(10px)",
+                    transition:
+                      "opacity 0.2s ease-out, transform 0.2s ease-out",
+                  },
             })}
           </React.Fragment>
         ))}
