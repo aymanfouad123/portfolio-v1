@@ -14,11 +14,7 @@ function TabSelector({ activeTabName }) {
             key={tab}
             className={`
               px-3 py-1 rounded-md font-mono transition-colors duration-200
-              ${
-                isActive
-                  ? "bg-[#232323] text-gray-200"
-                  : "text-gray-500 hover:text-gray-400"
-              }
+              ${isActive ? "bg-[#232323] text-gray-200" : "text-gray-500"}
             `}
             style={{
               overflow: "hidden",
