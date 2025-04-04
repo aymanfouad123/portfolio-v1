@@ -1,18 +1,18 @@
 import React from "react";
 
-function RequestBar({ onToggleView, currentView, disabled }) {
+function RequestBar({ onToggleView, currentView, disabled, requestMethod }) {
   return (
     <div className="flex items-center w-full bg-[#121212] rounded-md p-1">
       <div className="flex items-center w-full justify-between">
         {/* Left side with method and URL */}
         <div className="flex items-center flex-grow overflow-hidden">
-          {/* Method - GET or POST based on currentView */}
+          {/* Method - GET or POST based on requestMethod */}
           <div
             className={`md:px-4 px-2 py-2 font-mono font-bold md:text-base text-sm whitespace-nowrap ${
-              currentView === "code" ? "text-blue-400" : "text-orange-400"
+              requestMethod === "GET" ? "text-blue-400" : "text-orange-400"
             }`}
           >
-            {currentView === "code" ? "GET" : "POST"}
+            {requestMethod}
           </div>
 
           {/* URL/endpoint - right next to the method */}

@@ -7,11 +7,11 @@ import StatusMessage from "./components/statusMessage";
 import TabSelector from "./components/tabSelector";
 
 function App() {
-  // Core states
+  // Core states - setting initial request method to POST since initial view is code
   const [viewMode, setViewMode] = useState("code");
   const [isLoading, setIsLoading] = useState(false);
   const [showStatus, setShowStatus] = useState(false);
-  const [requestMethod, setRequestMethod] = useState("GET");
+  const [requestMethod, setRequestMethod] = useState("POST"); // Start with POST for code view
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Simplified view toggle with cleaner animation flow
@@ -19,7 +19,9 @@ function App() {
     if (isLoading || isTransitioning) return;
 
     const nextView = viewMode === "card" ? "code" : "card";
-    const nextMethod = nextView === "card" ? "POST" : "GET";
+
+    // Set the correct request method for each view (POST for code, GET for card)
+    const nextMethod = nextView === "code" ? "POST" : "GET";
 
     // Start transition
     setIsTransitioning(true);
@@ -62,6 +64,7 @@ function App() {
             onToggleView={toggleViewMode}
             currentView={viewMode}
             disabled={isLoading || isTransitioning}
+            requestMethod={requestMethod}
           />
         </div>
 
