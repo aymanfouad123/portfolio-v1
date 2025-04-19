@@ -2,7 +2,7 @@
 export const portfolioData = 
 {
     name: 'ayman fouad',
-    aboutme: 'hi! i am a 3rd year cs student @ mcmaster university. love talking tech, startups, and cool ideas — reach out via socials below!',
+    aboutme: 'hi! i am a 3rd year cs student @ mcmaster university. love talking about tech, startups, and cool ideas — reach out via socials below!',
     contact: 'shaikmoa@mcmaster.ca',
     work: 'software engineering intern @ SEH; i\'m developing a cloud based document management system for our clients',
     socials: {
