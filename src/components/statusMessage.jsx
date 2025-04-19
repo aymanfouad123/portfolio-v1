@@ -14,10 +14,10 @@ function StatusMessage({ viewMode, isLoading, showStatus }) {
   // Figure out what message to show
   let message;
   if (isLoading) {
-    message = viewMode === "POST" ? "Posting data..." : "Fetching data...";
+    message = viewMode === "POST" ? "Fetching data..." : "Posting data...";
   } else {
     message =
-      viewMode === "POST" ? "POST Status: 200 Created" : "GET Status: 200 OK";
+      viewMode === "POST" ? "GET Status: 200 OK" : "POST Status: 201 Created";
   }
 
   // Set text color based on loading state
