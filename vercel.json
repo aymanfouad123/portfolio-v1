@@ -1,6 +1,0 @@
-{
-  "redirects": [
-    { "source": "/resume", "destination": "/assets/resume.pdf", "permanent": false }
-  ]
-}
-
