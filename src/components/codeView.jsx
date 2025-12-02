@@ -41,7 +41,8 @@ function CodeView({ data, skipAnimation = false }) {
       if (
         value.includes("linkedin.com") ||
         value.includes("github.com") ||
-        value.includes("twitter.com")
+        value.includes("twitter.com") ||
+        value.includes("ayman.fyi")
       ) {
         const fullUrl = value.startsWith("http") ? value : `https://${value}`;
         return (
@@ -49,24 +50,6 @@ function CodeView({ data, skipAnimation = false }) {
             "
             <a
               href={fullUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "#6AB0F3", ...lightFont }}
-              className="hover:underline"
-            >
-              {value}
-            </a>
-            "
-          </span>
-        );
-      }
-      // Special handling for resume link
-      if (value.includes("resume.pdf") || value.includes("/assets/resume")) {
-        return (
-          <span style={{ color: "#CE9178", ...lightFont }}>
-            "
-            <a
-              href="/assets/resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "#6AB0F3", ...lightFont }}

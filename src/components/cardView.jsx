@@ -119,22 +119,18 @@ function CardView({ portfolioData }) {
   function SocialLinks({ socials }) {
     return (
       <div className="space-y-2">
-        {Object.entries(socials).map(([platform, url]) => {
-          // Handle resume link differently (it's a local path)
-          const href = url.startsWith('/') ? url : formatSocialUrl(url);
-          return (
-            <div key={platform}>
-              <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={linkStyle}
-              >
-                {platform}
-              </a>
-            </div>
-          );
-        })}
+        {Object.entries(socials).map(([platform, url]) => (
+          <div key={platform}>
+            <a
+              href={formatSocialUrl(url)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkStyle}
+            >
+              {platform}
+            </a>
+          </div>
+        ))}
       </div>
     );
   }
