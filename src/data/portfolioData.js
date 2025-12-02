@@ -9,5 +9,6 @@ export const portfolioData =
         linkedin: 'linkedin.com/in/aymanfsm',
         github: 'github.com/aymanfouad123',
         twitter: 'twitter.com/aymanfsm',
+        resume: '/assets/resume.pdf',
     }
 }

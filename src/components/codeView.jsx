@@ -60,6 +60,24 @@ function CodeView({ data, skipAnimation = false }) {
           </span>
         );
       }
+      // Special handling for resume link
+      if (value.includes("resume.pdf") || value.includes("/assets/resume")) {
+        return (
+          <span style={{ color: "#CE9178", ...lightFont }}>
+            "
+            <a
+              href="/assets/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "#6AB0F3", ...lightFont }}
+              className="hover:underline"
+            >
+              {value}
+            </a>
+            "
+          </span>
+        );
+      }
       // Regular strings get red color
       return <span style={{ color: "#CE9178", ...lightFont }}>"{value}"</span>;
     }
