@@ -4,7 +4,7 @@
 
 # portfolio-v1
 
-A simple portfolio page inspired by the APIs I worked with during my internship.
+A Postman-inspired portfolio from my internship.
 
 ## about
 
