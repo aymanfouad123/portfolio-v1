@@ -42,7 +42,7 @@ function RequestBar({ onToggleView, currentView, disabled, requestMethod }) {
                 className="mr-4"
               >
                 <path
-                  d="M10 2 C10 6, 8 10, 10 12"
+                  d="M10 2 Q8 7, 10 12"
                   stroke="#9ca3af"
                   strokeWidth="1.5"
                   strokeLinecap="round"
@@ -69,14 +69,14 @@ function RequestBar({ onToggleView, currentView, disabled, requestMethod }) {
                 className="mr-1"
               >
                 <path
-                  d="M28 10 C22 10, 18 5, 10 8"
+                  d="M28 10 Q19 7, 10 10"
                   stroke="#9ca3af"
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   fill="none"
                 />
                 <path
-                  d="M13 5 L9 8 L13 11"
+                  d="M14 7 L10 10 L14 13"
                   stroke="#9ca3af"
                   strokeWidth="1.5"
                   strokeLinecap="round"
