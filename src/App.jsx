@@ -107,9 +107,13 @@ function App() {
         </div>
       </div>
 
-      {/* Copyright footer */}
-      <div className="text-gray-500 text-sm font-mono mt-8 mb-6 opacity-70">
-        2025 © Ayman Fouad
+      {/* Copyright footer with v2 status */}
+      <div className="text-gray-500 text-sm font-mono mt-8 mb-6 opacity-70 flex flex-col items-center gap-2">
+        <span>2025 © Ayman Fouad</span>
+        <span className="text-xs flex items-center gap-1.5 text-amber-500/70">
+          <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+          v2 coming soon
+        </span>
       </div>
     </div>
   );
